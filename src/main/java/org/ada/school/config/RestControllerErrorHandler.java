@@ -10,26 +10,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestControllerAdvice
-class RestControllerErrorHandler
-{
+class RestControllerErrorHandler {
 
-    @ExceptionHandler( HttpMessageNotReadableException.class )
-    private ResponseEntity<String> handleHTTPMessageNotReadable( HttpMessageNotReadableException exception )
-    {
-        return new ResponseEntity( exception.getCause().getMessage(), HttpStatus.BAD_REQUEST );
-    }
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	private ResponseEntity<String> handleHTTPMessageNotReadable(HttpMessageNotReadableException exception) {
 
-    @ExceptionHandler( MissingServletRequestPartException.class )
-    private ResponseEntity<String> handleMissingServletRequestPart( MissingServletRequestPartException exception )
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getCause().getMessage());
+	}
 
-    {
-        return new ResponseEntity( exception.getCause().getMessage(), HttpStatus.BAD_REQUEST );
-    }
+	@ExceptionHandler(MissingServletRequestPartException.class)
+	private ResponseEntity<String> handleMissingServletRequestPart(MissingServletRequestPartException exception) {
 
-    @ExceptionHandler( InternalServerErrorException.class )
-    private ResponseEntity<ServerErrorResponseDto> handleRuntimeException( InternalServerErrorException exception )
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getCause().getMessage());
+	}
 
-    {
-        return new ResponseEntity( exception.getServerErrorResponseDto(), exception.getHttpStatus() );
-    }
+	@ExceptionHandler(InternalServerErrorException.class)
+	private ResponseEntity<ServerErrorResponseDto> handleRuntimeException(InternalServerErrorException exception) {
+
+		return ResponseEntity.status(exception.getHttpStatus()).body(exception.getServerErrorResponseDto());
+	}
 }
