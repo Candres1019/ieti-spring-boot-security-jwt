@@ -2,6 +2,7 @@ package org.ada.school.controller.user;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.ada.school.repository.document.User;
 import org.ada.school.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/user")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
 	private final UserService userService;
 
-	public UserController(@Autowired UserService userService) {
-
-		this.userService = userService;
-	}
-
 	@GetMapping
-	public List<User> all() {
+	public ResponseEntity<List<User>> all() {
 
-		return userService.all();
+		return ResponseEntity.ok(userService.all());
 	}
 
 	@GetMapping("/{id}")
-	public User findById(@PathVariable String id) {
+	public ResponseEntity<User> findById(@PathVariable String id) {
 
-		return userService.findById(id);
+		return ResponseEntity.ok(userService.findById(id));
 	}
 
 	@PostMapping
