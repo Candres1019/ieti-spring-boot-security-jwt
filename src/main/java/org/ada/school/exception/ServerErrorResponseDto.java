@@ -1,35 +1,24 @@
 package org.ada.school.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.ada.school.error.ErrorCodeEnum;
 import org.springframework.http.HttpStatus;
 
-public class ServerErrorResponseDto
-{
-    String message;
+@Getter
+public class ServerErrorResponseDto {
 
-    ErrorCodeEnum errorCode;
+	private final String message;
 
-    int httpStatus;
+    private final ErrorCodeEnum errorCode;
 
-    public ServerErrorResponseDto( String message, ErrorCodeEnum errorCode, HttpStatus httpStatus )
-    {
-        this.message = message;
-        this.errorCode = errorCode;
-        this.httpStatus = httpStatus.value();
-    }
+    private final int httpStatus;
 
-    public String getMessage()
-    {
-        return message;
-    }
+	public ServerErrorResponseDto(String message, ErrorCodeEnum errorCode, HttpStatus httpStatus) {
 
-    public ErrorCodeEnum getErrorCode()
-    {
-        return errorCode;
-    }
+		this.message = message;
+		this.errorCode = errorCode;
+		this.httpStatus = httpStatus.value();
+	}
 
-    public int getHttpStatus()
-    {
-        return httpStatus;
-    }
 }
