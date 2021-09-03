@@ -11,6 +11,7 @@ import org.ada.school.controller.user.UserDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Getter
 @Document
@@ -40,8 +41,7 @@ public class User {
 		email = userDto.getEmail();
 		createdAt = new Date();
 		roles = new ArrayList<>(Collections.singleton(RoleEnum.USER));
-		//TODO uncomment this line
-		// passwordHash = BCrypt.hashpw( userDto.getPassword(), BCrypt.gensalt() );
+		passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
 	}
 
 	public void update(UserDto userDto) {
@@ -49,11 +49,9 @@ public class User {
 		this.name = userDto.getName();
 		this.lastName = userDto.getLastName();
 		this.email = userDto.getEmail();
-		//TODO uncomment these lines
-        /*if ( userDto.getPassword() != null )
-        {
-            this.passwordHash = BCrypt.hashpw( userDto.getPassword(), BCrypt.gensalt() );
-        }*/
+		if (userDto.getPassword() != null) {
+			this.passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
+		}
 	}
 
 }
