@@ -11,7 +11,6 @@ import org.ada.school.repository.document.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component("userServiceMongoDB")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceMongoDB implements UserService {
@@ -28,22 +27,24 @@ public class UserServiceMongoDB implements UserService {
 	public User findById(String id) {
 
 		Optional<User> optionalUser = userRepository.findById(id);
+
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
-		} else {
-			throw new UserNotFoundException();
 		}
+
+		throw new UserNotFoundException();
 	}
 
 	@Override
 	public User findByEmail(String email) throws UserNotFoundException {
 
 		Optional<User> optionalUser = userRepository.findByEmail(email);
+
 		if (optionalUser.isPresent()) {
 			return optionalUser.get();
-		} else {
-			throw new UserNotFoundException();
 		}
+
+		throw new UserNotFoundException();
 	}
 
 	@Override
@@ -55,22 +56,29 @@ public class UserServiceMongoDB implements UserService {
 	@Override
 	public boolean deleteById(String id) {
 
+		boolean canDelete = false;
+
 		if (userRepository.existsById(id)) {
 			userRepository.deleteById(id);
-			return true;
+			canDelete = true;
 		}
-		return false;
+
+		return canDelete;
 	}
 
 	@Override
 	public User update(UserDto userDto, String id) {
 
-		if (userRepository.findById(id).isPresent()) {
-			User user = userRepository.findById(id).get();
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
 			user.update(userDto);
 			userRepository.save(user);
 			return user;
 		}
+
 		return null;
 	}
+
 }
