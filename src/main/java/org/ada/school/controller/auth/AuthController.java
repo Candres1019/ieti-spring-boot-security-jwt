@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("v1/auth")
+@RequestMapping("/v1/auth")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 
@@ -35,11 +35,11 @@ public class AuthController {
 
 		User user = userService.findByEmail(loginDto.getEmail());
 		if (BCrypt.checkpw(loginDto.getPassword(), user.getPasswordHash())) {
+
 			return generateTokenDto(user);
-		} else {
-			throw new InvalidCredentialsException();
 		}
 
+		throw new InvalidCredentialsException();
 	}
 
 	private String generateToken(User user, Date expirationDate) {
@@ -58,6 +58,7 @@ public class AuthController {
 		Calendar expirationDate = Calendar.getInstance();
 		expirationDate.add(Calendar.MINUTE, TOKEN_DURATION_MINUTES);
 		String token = generateToken(user, expirationDate.getTime());
+
 		return new TokenDto(token, expirationDate.getTime());
 	}
 }
