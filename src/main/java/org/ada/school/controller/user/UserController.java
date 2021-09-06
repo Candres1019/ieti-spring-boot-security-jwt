@@ -1,6 +1,10 @@
 package org.ada.school.controller.user;
 
+import static org.ada.school.utils.Constants.ADMIN_ROLE;
+
 import java.util.List;
+
+import javax.annotation.security.RolesAllowed;
 
 import lombok.RequiredArgsConstructor;
 import org.ada.school.repository.document.User;
@@ -47,6 +51,7 @@ public class UserController {
 		return ResponseEntity.ok(userService.update(userDto, id));
 	}
 
+	@RolesAllowed(ADMIN_ROLE)
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable String id) {
 
